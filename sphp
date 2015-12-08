@@ -13,8 +13,8 @@ brew list php$newversion 2> /dev/null > /dev/null
 if [ $? -eq 0 ]; then
 	echo "PHP version $newversion found"
 
-	echo "Stopping PHP-FPM $currentversion"
-	launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.php$currentversion.plist
+	echo "Stopping PHP $currentversion"
+	brew services stop php$currentversion
 
 	echo "Unlinking old binaries..."
 	brew unlink php$currentversion 2> /dev/null > /dev/null
@@ -22,8 +22,8 @@ if [ $? -eq 0 ]; then
 	echo "Linking new binaries..."
 	brew link php$newversion
 
-	echo "Starting PHP-FPM $newversion"
-	launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php$newversion.plist
+	echo "Starting PHP $newversion"
+	brew services start php$newversion
 
 	echo "Done."
 else
