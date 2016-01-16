@@ -6,12 +6,15 @@ if [ $# -ne 1 ]; then
 fi
 
 currentversion="`php -r \"echo str_replace('.', '', substr(phpversion(), 0, 3));\"`"
-newversion="$1"
+newversion="`echo $1 | sed -e 's/php//g'`"
 
 brew list php$newversion 2> /dev/null > /dev/null
 
 if [ $? -eq 0 ]; then
 	echo "PHP version $newversion found"
+
+	echo "Stopping nginx"
+	sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 
 	echo "Stopping PHP $currentversion"
 	brew services stop php$currentversion
@@ -24,6 +27,9 @@ if [ $? -eq 0 ]; then
 
 	echo "Starting PHP $newversion"
 	brew services start php$newversion
+
+	echo "Starting nginx"
+	sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.nginx.plist
 
 	echo "Done."
 else
