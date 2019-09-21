@@ -20,10 +20,10 @@ if [ $? -eq 0 ]; then
 	brew services stop php$currentversion
 
 	echo "Unlinking old binaries..."
-	brew unlink php$currentversion 2> /dev/null > /dev/null
+	brew unlink php$currentversion blackfire-php$currentversion 2> /dev/null > /dev/null
 
 	echo "Linking new binaries..."
-	brew link php$newversion
+	brew link php$newversion blackfire-php$newversion
 
 	echo "Starting PHP $newversion"
 	brew services start php$newversion
